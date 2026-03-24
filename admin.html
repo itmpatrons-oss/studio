@@ -364,6 +364,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const API_BASE = window.location.protocol + '//' + window.location.hostname + ':3000/api';
             // Check Auth
             const token = localStorage.getItem('lumina_admin_token');
             if (!token) {
@@ -398,7 +399,7 @@
             const map = {
                 hero: ['hero_title', 'hero_subtitle', 'hero_image_1', 'hero_image_2', 'hero_image_3'],
                 about: ['about_title', 'about_years', 'about_text_1', 'about_text_2', 'about_image'],
-                services: ['services_title', 'services_subtitle', 'service_1_title', 'service_1_desc', 'service_2_title', 'service_2_desc', 'service_3_title', 'service_3_desc', 'service_4_title', 'service_4_desc'],
+                services: ['services_title', 'services_subtitle', 'service_1_icon', 'service_1_title', 'service_1_desc', 'service_2_icon', 'service_2_title', 'service_2_desc', 'service_3_icon', 'service_3_title', 'service_3_desc', 'service_4_icon', 'service_4_title', 'service_4_desc'],
                 portfolio: ['portfolio_title', 'portfolio_subtitle', 'portfolio_image_1', 'portfolio_image_2', 'portfolio_image_3', 'portfolio_image_4', 'portfolio_image_5', 'portfolio_image_6'],
                 testimonials: ['testimonials_title', 'testimonial_1_name', 'testimonial_1_title', 'testimonial_1_text', 'testimonial_1_image', 'testimonial_2_name', 'testimonial_2_title', 'testimonial_2_text', 'testimonial_2_image', 'testimonial_3_name', 'testimonial_3_title', 'testimonial_3_text', 'testimonial_3_image'],
                 contact: ['contact_title', 'contact_bg_image', 'contact_address', 'contact_phone', 'contact_email', 'whatsapp_number', 'booking_title', 'booking_subtitle']
@@ -472,7 +473,7 @@
                         const fd = new FormData();
                         fd.append('image', e.target.files[0]);
                         
-                        fetch('http://localhost:3000/api/upload', {
+                        fetch(API_BASE + '/upload', {
                             method: 'POST',
                             headers: { 'Authorization': token },
                             body: fd
@@ -514,7 +515,7 @@
             }
 
             // Load Data
-            fetch('http://localhost:3000/api/data')
+            fetch(API_BASE + '/data')
                 .then(res => res.json())
                 .then(data => {
                     for (const key in data) {
@@ -540,7 +541,7 @@
                 const msg = document.getElementById('status-msg');
                 msg.style.display = 'none';
                 
-                fetch('http://localhost:3000/api/data', {
+                fetch(API_BASE + '/data', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': token },
                     body: JSON.stringify(dataObj)

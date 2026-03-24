@@ -1,9 +1,10 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    
+    const API_BASE = window.location.protocol + '//' + window.location.hostname + ':3000/api';
     // 0. Fetch Dynamic Data from Dashboard JSON
-    fetch('http://localhost:3000/api/data')
+    fetch(API_BASE + '/data')
         .then(res => res.json())
         .then(data => {
             if(document.querySelector('.hero-content h1')) document.querySelector('.hero-content h1').innerHTML = data.hero_title || '';
@@ -22,18 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if(svcCards[0]) {
                 if(data.service_1_title) svcCards[0].querySelector('h3').innerHTML = data.service_1_title;
                 if(data.service_1_desc) svcCards[0].querySelector('p').innerHTML = data.service_1_desc;
+                if(data.service_1_icon) svcCards[0].querySelector('.icon i').className = data.service_1_icon;
             }
             if(svcCards[1]) {
                 if(data.service_2_title) svcCards[1].querySelector('h3').innerHTML = data.service_2_title;
                 if(data.service_2_desc) svcCards[1].querySelector('p').innerHTML = data.service_2_desc;
+                if(data.service_2_icon) svcCards[1].querySelector('.icon i').className = data.service_2_icon;
             }
             if(svcCards[2]) {
                 if(data.service_3_title) svcCards[2].querySelector('h3').innerHTML = data.service_3_title;
                 if(data.service_3_desc) svcCards[2].querySelector('p').innerHTML = data.service_3_desc;
+                if(data.service_3_icon) svcCards[2].querySelector('.icon i').className = data.service_3_icon;
             }
             if(svcCards[3]) {
                 if(data.service_4_title) svcCards[3].querySelector('h3').innerHTML = data.service_4_title;
                 if(data.service_4_desc) svcCards[3].querySelector('p').innerHTML = data.service_4_desc;
+                if(data.service_4_icon) svcCards[3].querySelector('.icon i').className = data.service_4_icon;
             }
             
             if(document.querySelector('#testimonials .section-title')) document.querySelector('#testimonials .section-title').innerHTML = data.testimonials_title || '';
