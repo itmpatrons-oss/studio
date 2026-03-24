@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Dashboard - Manage Content</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --panel-bg: #141414;
+            --gold: #d4af37;
+            --gold-hover: #b89326;
+            --text-main: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        body { 
+            font-family: var(--font-body); 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 0;
+            z-index: 10;
+        }
+        .sidebar-brand {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+        .sidebar-brand span { color: var(--gold); }
+        .nav-items { flex: 1; display: flex; flex-direction: column; gap: 5px; padding: 0 20px; }
+        .nav-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid transparent;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 15px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-btn i { font-size: 18px; width: 20px; text-align: center; color: var(--gold); }
+        .nav-btn:hover { background: rgba(212, 175, 55, 0.1); }
+        .nav-btn.active {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--border-color);
+            color: var(--gold);
+        }
+        .logout-wrap { padding: 0 20px; margin-top: auto; }
+        .logout-btn {
+            background: transparent;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { background: #e74c3c; color: #fff; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .top-bar {
+            padding: 20px 40px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .top-bar h2 { font-family: var(--font-heading); font-size: 22px; color: var(--gold); }
+        .status-msg { font-size: 14px; font-weight: 500; padding: 8px 15px; border-radius: 4px; display: none; }
+        .status-msg.success { display: block; background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .status-msg.error { display: block; background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+
+        .content-area {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Form Sections */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .form-section.active { display: block; }
+
+        .section-header {
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h3 { font-family: var(--font-heading); font-size: 28px; margin-bottom: 5px; }
+        .section-header p { color: var(--text-muted); font-size: 14px; }
+
+        /* Grid Layout */
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .field-card {
+            background: var(--panel-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .field-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--gold);
+            opacity: 0.5;
+        }
+        .field-card.full-width { grid-column: 1 / -1; }
+
+        label {
+            display: block;
+            color: var(--gold);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(0,0,0,0.5);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        
+        /* Image Upload Styles */
+        .image-upload-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            background: #000;
+        }
+        .upload-controls { flex: 1; }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .btn-upload {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            border: 1px dashed var(--gold);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            display: block;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-upload:hover { background: var(--gold); color: #000; border-style: solid; }
+        .upload-status { font-size: 12px; color: #2ecc71; margin-top: 5px; display: none; }
+        
+        /* Sticky Actions */
+        .bottom-actions {
+            position: sticky;
+            bottom: 0;
+            padding: 20px 40px;
+            background: var(--panel-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            z-index: 5;
+        }
+        .btn-save {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-heading);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-save:hover { background: var(--gold-hover); transform: translateY(-2px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">LU<span>MI</span>NA<br><span style="font-size:12px;color:#aaa;letter-spacing:1px;font-family:var(--font-body)">Control Panel</span></div>
+        <div class="nav-items" id="nav-items">
+            <button class="nav-btn active" data-target="hero-sec"><i class="fas fa-camera-retro"></i> Hero Section</button>
+            <button class="nav-btn" data-target="about-sec"><i class="fas fa-info-circle"></i> About Us</button>
+            <button class="nav-btn" data-target="services-sec"><i class="fas fa-concierge-bell"></i> Services</button>
+            <button class="nav-btn" data-target="portfolio-sec"><i class="fas fa-images"></i> Portfolio Grid</button>
+            <button class="nav-btn" data-target="testimonials-sec"><i class="fas fa-comments"></i> Testimonials</button>
+            <button class="nav-btn" data-target="contact-sec"><i class="fas fa-address-book"></i> Contact & Others</button>
+        </div>
+        <div class="logout-wrap">
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2 id="current-section-title">Hero Section Dashboard</h2>
+            <div id="status-msg" class="status-msg"></div>
+        </div>
+
+        <form id="adminForm">
+            <div class="content-area">
+                
+                <!-- Hero Section -->
+                <div class="form-section active" id="hero-sec">
+                    <div class="section-header">
+                        <h3>Hero Banners</h3>
+                        <p>Manage the main sliders and text appearing at the top of the site.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-hero"></div>
+                </div>
+
+                <!-- About Section -->
+                <div class="form-section" id="about-sec">
+                    <div class="section-header">
+                        <h3>About Us</h3>
+                        <p>Update your studio's story and experience banner.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-about"></div>
+                </div>
+
+                <!-- Services Section -->
+                <div class="form-section" id="services-sec">
+                    <div class="section-header">
+                        <h3>Services text</h3>
+                        <p>Manage the headings for the services section.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-services"></div>
+                </div>
+
+                <!-- Portfolio Section -->
+                <div class="form-section" id="portfolio-sec">
+                    <div class="section-header">
+                        <h3>Portfolio Showcase</h3>
+                        <p>Update the core 6 portfolio grid images appearing on the main page.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-portfolio"></div>
+                </div>
+
+                <!-- Testimonials Section -->
+                <div class="form-section" id="testimonials-sec">
+                    <div class="section-header">
+                        <h3>Client Testimonials</h3>
+                        <p>Manage the headings, avatars, and reviews showing up in the testimonial slider.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-testimonials"></div>
+                </div>
+
+                <!-- Contact & Misc Section -->
+                <div class="form-section" id="contact-sec">
+                    <div class="section-header">
+                        <h3>Contact, Booking & Testimonials</h3>
+                        <p>Manage all location details, titles, and background blocks.</p>
+                    </div>
+                    <div class="fields-grid" id="grid-contact"></div>
+                </div>
+
+            </div>
+
+            <div class="bottom-actions">
+                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Publish Changes</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check Auth
+            const token = localStorage.getItem('lumina_admin_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('lumina_admin_token');
+                window.location.href = 'login.html';
+            });
+
+            // Navigation Logic
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('.form-section');
+            const titleEl = document.getElementById('current-section-title');
+
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    sections.forEach(s => s.classList.remove('active'));
+                    const target = btn.getAttribute('data-target');
+                    document.getElementById(target).classList.add('active');
+
+                    titleEl.textContent = btn.textContent.trim() + ' Dashboard';
+                });
+            });
+
+            // Data Grouping Mapping
+            const map = {
+                hero: ['hero_title', 'hero_subtitle', 'hero_image_1', 'hero_image_2', 'hero_image_3'],
+                about: ['about_title', 'about_years', 'about_text_1', 'about_text_2', 'about_image'],
+                services: ['services_title', 'services_subtitle', 'service_1_title', 'service_1_desc', 'service_2_title', 'service_2_desc', 'service_3_title', 'service_3_desc', 'service_4_title', 'service_4_desc'],
+                portfolio: ['portfolio_title', 'portfolio_subtitle', 'portfolio_image_1', 'portfolio_image_2', 'portfolio_image_3', 'portfolio_image_4', 'portfolio_image_5', 'portfolio_image_6'],
+                testimonials: ['testimonials_title', 'testimonial_1_name', 'testimonial_1_title', 'testimonial_1_text', 'testimonial_1_image', 'testimonial_2_name', 'testimonial_2_title', 'testimonial_2_text', 'testimonial_2_image', 'testimonial_3_name', 'testimonial_3_title', 'testimonial_3_text', 'testimonial_3_image'],
+                contact: ['contact_title', 'contact_bg_image', 'contact_address', 'contact_phone', 'contact_email', 'whatsapp_number', 'booking_title', 'booking_subtitle']
+            };
+
+            function determineGrid(key) {
+                for (let section in map) {
+                    if (map[section].includes(key)) return document.getElementById(`grid-${section}`);
+                }
+                return document.getElementById('grid-contact'); // fallback
+            }
+
+            // Create Field Element
+            function createField(key, val) {
+                const card = document.createElement('div');
+                card.className = 'field-card';
+                if(val.length > 50 || val.includes('<')) card.classList.add('full-width'); // textareas take full width
+                
+                const label = document.createElement('label');
+                label.textContent = key.replace(/_/g, ' ');
+                card.appendChild(label);
+
+                if (key.includes('_image')) {
+                    // Image Uploader Logic
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'image-upload-wrapper';
+
+                    const preview = document.createElement('img');
+                    preview.className = 'image-preview';
+                    preview.src = val || 'https://via.placeholder.com/100?text=No+Image';
+
+                    const controls = document.createElement('div');
+                    controls.className = 'upload-controls';
+
+                    const fileWrap = document.createElement('div');
+                    fileWrap.className = 'file-input-wrapper';
+                    
+                    const btnUpload = document.createElement('div');
+                    btnUpload.className = 'btn-upload';
+                    btnUpload.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Select New Image';
+                    
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.accept = 'image/*';
+
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = key;
+                    hiddenInput.value = val;
+
+                    const status = document.createElement('div');
+                    status.className = 'upload-status';
+                    status.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded! Pending save.';
+
+                    fileWrap.appendChild(btnUpload);
+                    fileWrap.appendChild(fileInput);
+                    controls.appendChild(fileWrap);
+                    controls.appendChild(hiddenInput);
+                    controls.appendChild(status);
+
+                    wrapper.appendChild(preview);
+                    wrapper.appendChild(controls);
+                    card.appendChild(wrapper);
+
+                    // Upload Event
+                    fileInput.addEventListener('change', (e) => {
+                        if(!e.target.files[0]) return;
+                        btnUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                        status.style.display = 'none';
+
+                        const fd = new FormData();
+                        fd.append('image', e.target.files[0]);
+                        
+                        fetch('http://localhost:3000/api/upload', {
+                            method: 'POST',
+                            headers: { 'Authorization': token },
+                            body: fd
+                        })
+                        .then(r => r.json())
+                        .then(d => {
+                            if(d.success) {
+                                hiddenInput.value = d.url;
+                                preview.src = d.url;
+                                btnUpload.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Replace Again';
+                                status.style.display = 'block';
+                            } else {
+                                alert('Upload failed: ' + (d.error || 'unknown'));
+                                btnUpload.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Select New Image';
+                            }
+                        })
+                        .catch(err => {
+                            alert('Upload error: ' + err);
+                            btnUpload.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Select New Image';
+                        });
+                    });
+
+                } else if (val.length > 50 || val.includes('<')) {
+                    // Textarea
+                    const input = document.createElement('textarea');
+                    input.name = key;
+                    input.value = val;
+                    card.appendChild(input);
+                } else {
+                    // Normal Text Input
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = key;
+                    input.value = val;
+                    card.appendChild(input);
+                }
+                
+                return card;
+            }
+
+            // Load Data
+            fetch('http://localhost:3000/api/data')
+                .then(res => res.json())
+                .then(data => {
+                    for (const key in data) {
+                        const grid = determineGrid(key);
+                        const fieldCard = createField(key, data[key]);
+                        grid.appendChild(fieldCard);
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('grid-hero').innerHTML = '<p style="color:red">Failed to connect to backend.</p>';
+                });
+
+            // Save Data
+            document.getElementById('adminForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const dataObj = Object.fromEntries(formData.entries());
+                
+                const btn = e.target.querySelector('.btn-save');
+                const btnOriginal = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                const msg = document.getElementById('status-msg');
+                msg.style.display = 'none';
+                
+                fetch('http://localhost:3000/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify(dataObj)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.error) throw new Error(data.error);
+                    msg.textContent = 'Data published successfully!';
+                    msg.className = 'status-msg success';
+                    btn.innerHTML = btnOriginal;
+                    
+                    // Hide messages
+                    document.querySelectorAll('.upload-status').forEach(el => el.style.display = 'none');
+                    setTimeout(() => msg.style.display = 'none', 3000);
+                })
+                .catch(err => {
+                    msg.textContent = 'Error updating data: ' + err.message;
+                    msg.className = 'status-msg error';
+                    btn.innerHTML = btnOriginal;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

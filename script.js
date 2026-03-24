@@ -2,6 +2,98 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // 0. Fetch Dynamic Data from Dashboard JSON
+    fetch('http://localhost:3000/api/data')
+        .then(res => res.json())
+        .then(data => {
+            if(document.querySelector('.hero-content h1')) document.querySelector('.hero-content h1').innerHTML = data.hero_title || '';
+            if(document.querySelector('.hero-content p')) document.querySelector('.hero-content p').innerHTML = data.hero_subtitle || '';
+            if(document.querySelector('.experience-badge h2')) document.querySelector('.experience-badge h2').innerHTML = data.about_years || '';
+            if(document.querySelector('.about-text .section-title')) document.querySelector('.about-text .section-title').innerHTML = data.about_title || '';
+            if(document.querySelector('.about-text p:nth-of-type(1)')) document.querySelector('.about-text p:nth-of-type(1)').innerHTML = data.about_text_1 || '';
+            if(document.querySelector('.about-text p:nth-of-type(2)')) document.querySelector('.about-text p:nth-of-type(2)').innerHTML = data.about_text_2 || '';
+            if(document.querySelector('#services .section-title')) document.querySelector('#services .section-title').innerHTML = data.services_title || '';
+            if(document.querySelector('#services .section-subtitle')) document.querySelector('#services .section-subtitle').innerHTML = data.services_subtitle || '';
+            if(document.querySelector('#portfolio .section-title')) document.querySelector('#portfolio .section-title').innerHTML = data.portfolio_title || '';
+            if(document.querySelector('#portfolio .section-subtitle')) document.querySelector('#portfolio .section-subtitle').innerHTML = data.portfolio_subtitle || '';
+            
+            // Service Cards
+            const svcCards = document.querySelectorAll('.service-card');
+            if(svcCards[0]) {
+                if(data.service_1_title) svcCards[0].querySelector('h3').innerHTML = data.service_1_title;
+                if(data.service_1_desc) svcCards[0].querySelector('p').innerHTML = data.service_1_desc;
+            }
+            if(svcCards[1]) {
+                if(data.service_2_title) svcCards[1].querySelector('h3').innerHTML = data.service_2_title;
+                if(data.service_2_desc) svcCards[1].querySelector('p').innerHTML = data.service_2_desc;
+            }
+            if(svcCards[2]) {
+                if(data.service_3_title) svcCards[2].querySelector('h3').innerHTML = data.service_3_title;
+                if(data.service_3_desc) svcCards[2].querySelector('p').innerHTML = data.service_3_desc;
+            }
+            if(svcCards[3]) {
+                if(data.service_4_title) svcCards[3].querySelector('h3').innerHTML = data.service_4_title;
+                if(data.service_4_desc) svcCards[3].querySelector('p').innerHTML = data.service_4_desc;
+            }
+            
+            if(document.querySelector('#testimonials .section-title')) document.querySelector('#testimonials .section-title').innerHTML = data.testimonials_title || '';
+            
+            // Testimonials
+            const tSlides = document.querySelectorAll('.testimonial-slide');
+            if(tSlides[0]) {
+                if(data.testimonial_1_text) tSlides[0].querySelector('.review').innerHTML = data.testimonial_1_text;
+                if(data.testimonial_1_name) tSlides[0].querySelector('.client-info h4').innerHTML = data.testimonial_1_name;
+                if(data.testimonial_1_title) tSlides[0].querySelector('.client-info span').innerHTML = data.testimonial_1_title;
+                if(data.testimonial_1_image) tSlides[0].querySelector('.client-info img').src = data.testimonial_1_image;
+            }
+            if(tSlides[1]) {
+                if(data.testimonial_2_text) tSlides[1].querySelector('.review').innerHTML = data.testimonial_2_text;
+                if(data.testimonial_2_name) tSlides[1].querySelector('.client-info h4').innerHTML = data.testimonial_2_name;
+                if(data.testimonial_2_title) tSlides[1].querySelector('.client-info span').innerHTML = data.testimonial_2_title;
+                if(data.testimonial_2_image) tSlides[1].querySelector('.client-info img').src = data.testimonial_2_image;
+            }
+            if(tSlides[2]) {
+                if(data.testimonial_3_text) tSlides[2].querySelector('.review').innerHTML = data.testimonial_3_text;
+                if(data.testimonial_3_name) tSlides[2].querySelector('.client-info h4').innerHTML = data.testimonial_3_name;
+                if(data.testimonial_3_title) tSlides[2].querySelector('.client-info span').innerHTML = data.testimonial_3_title;
+                if(data.testimonial_3_image) tSlides[2].querySelector('.client-info img').src = data.testimonial_3_image;
+            }
+            
+            if(document.querySelector('.form-card h2')) document.querySelector('.form-card h2').innerHTML = data.booking_title || '';
+            if(document.querySelector('.form-card p')) document.querySelector('.form-card p').innerHTML = data.booking_subtitle || '';
+            if(document.querySelector('.contact-info-section .section-title')) document.querySelector('.contact-info-section .section-title').innerHTML = data.contact_title || '';
+            if(document.querySelector('.contact-item:nth-child(1) p')) document.querySelector('.contact-item:nth-child(1) p').innerHTML = data.contact_address || '';
+            if(document.querySelector('.contact-item:nth-child(2) p')) document.querySelector('.contact-item:nth-child(2) p').innerHTML = data.contact_phone || '';
+            if(document.querySelector('.contact-item:nth-child(3) p')) document.querySelector('.contact-item:nth-child(3) p').innerHTML = data.contact_email || '';
+            if(document.querySelector('.whatsapp-btn') && data.whatsapp_number) {
+                 document.querySelector('.whatsapp-btn').href = "https://wa.me/" + data.whatsapp_number + "?text=Hello,%20I%20want%20to%20book%20a%20photoshoot";
+            }
+            
+            // Image mapping
+            const heroSlides = document.querySelectorAll('.hero-slider .slide');
+            if(heroSlides[0] && data.hero_image_1) heroSlides[0].style.backgroundImage = `url('${data.hero_image_1}')`;
+            if(heroSlides[1] && data.hero_image_2) heroSlides[1].style.backgroundImage = `url('${data.hero_image_2}')`;
+            if(heroSlides[2] && data.hero_image_3) heroSlides[2].style.backgroundImage = `url('${data.hero_image_3}')`;
+            
+            if(document.querySelector('.about-image img')) document.querySelector('.about-image img').src = data.about_image || '';
+            
+            const portfolioItems = document.querySelectorAll('.portfolio-item img');
+            if(portfolioItems[0] && data.portfolio_image_1) portfolioItems[0].src = data.portfolio_image_1;
+            if(portfolioItems[1] && data.portfolio_image_2) portfolioItems[1].src = data.portfolio_image_2;
+            if(portfolioItems[2] && data.portfolio_image_3) portfolioItems[2].src = data.portfolio_image_3;
+            if(portfolioItems[3] && data.portfolio_image_4) portfolioItems[3].src = data.portfolio_image_4;
+            if(portfolioItems[4] && data.portfolio_image_5) portfolioItems[4].src = data.portfolio_image_5;
+            if(portfolioItems[5] && data.portfolio_image_6) portfolioItems[5].src = data.portfolio_image_6;
+            
+            const contactBg = document.querySelector('.contact-area');
+            if(contactBg && data.contact_bg_image) {
+                 contactBg.style.backgroundImage = `url('${data.contact_bg_image}')`;
+            }
+        })
+        .catch(err => {
+            console.error("Dashboard backend is not running. Using fallback static HTML content.", err);
+        });
+
     // 1. Mobile Menu & Sticky Navbar
     const navbar = document.getElementById('navbar');
     const mobileMenu = document.getElementById('mobile-menu');
