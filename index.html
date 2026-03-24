@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Photo Studio | Capturing Moments, Creating Memories</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">LU<span>MI</span>NA</a>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-slider">
+            <div class="slide active" style="background-image: url('assets/images/indian_wedding_photo_1774346471010.png');"></div>
+            <div class="slide" style="background-image: url('assets/images/indian_event_photo_1774346500460.png');"></div>
+            <!-- Duplicating images to simulate more content -->
+            <div class="slide" style="background-image: url('assets/images/indian_baby_photo_1774346518211.png');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content reveal">
+            <h1>Capturing Moments,<br><span>Creating Memories</span></h1>
+            <p>Premium photography services for your special occasions.</p>
+            <div class="hero-buttons">
+                <a href="#book" class="btn btn-primary">Book Now</a>
+                <a href="#portfolio" class="btn btn-outline">View Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section-padding" id="about">
+        <div class="container row">
+            <div class="col-6 reveal">
+                <div class="about-image">
+                    <img src="assets/images/indian_wedding_photo_1774346471010.png" alt="About Lumina">
+                    <div class="experience-badge">
+                        <h2>10+</h2>
+                        <p>Years Experience</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 about-text reveal">
+                <h2 class="section-title">The Art of Storytelling <span>Through Lenses</span></h2>
+                <p>At Lumina Studio, we believe every moment holds a unique story waiting to be told. Our passion is to freeze time and capture the raw emotions, the beautiful chaos, and the delicate details that make your moments unforgettable.</p>
+                <p>We blend cinematic artistry with premium execution to bring out the luxurious feel of every event.</p>
+                <a href="#contact" class="btn btn-primary" style="margin-top: 20px;">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services section-padding" id="services">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">Our Premium <span>Services</span></h2>
+                <p class="section-subtitle">Tailored photography experiences designed to perfection.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="icon"><i class="fas fa-rings-wedding"></i></div>
+                    <h3>Wedding Photography</h3>
+                    <p>Cinematic coverage of your special day, capturing every emotion and detail.</p>
+                </div>
+                <div class="service-card reveal" style="transition-delay: 0.1s;">
+                    <div class="icon"><i class="fas fa-camera"></i></div>
+                    <h3>Pre-Wedding Shoots</h3>
+                    <p>Romantic storytelling through breathtaking outdoor and studio sessions.</p>
+                </div>
+                <div class="service-card reveal" style="transition-delay: 0.2s;">
+                    <div class="icon"><i class="fas fa-glass-cheers"></i></div>
+                    <h3>Event Coverage</h3>
+                    <p>Professional documentation of corporate and luxury private events.</p>
+                </div>
+                <div class="service-card reveal" style="transition-delay: 0.3s;">
+                    <div class="icon"><i class="fas fa-baby"></i></div>
+                    <h3>Baby & Maternity</h3>
+                    <p>Soft, warm, and highly creative portraits of your little ones and pregnancy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio section-padding" id="portfolio">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">Our <span>Portfolio</span></h2>
+                <p class="section-subtitle">A glimpse into our visual aesthetics.</p>
+            </div>
+            
+            <div class="portfolio-filters reveal">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="wedding">Wedding</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="baby">Baby Shoot</button>
+            </div>
+
+            <div class="portfolio-grid reveal">
+                <div class="portfolio-item wedding" data-category="wedding">
+                    <img src="assets/images/indian_wedding_photo_1774346471010.png" alt="Wedding">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Royal Wedding</h4>
+                    </div>
+                </div>
+                <div class="portfolio-item events" data-category="events">
+                    <img src="assets/images/indian_event_photo_1774346500460.png" alt="Event">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Corporate Gala</h4>
+                    </div>
+                </div>
+                <div class="portfolio-item baby" data-category="baby">
+                    <img src="assets/images/indian_baby_photo_1774346518211.png" alt="Baby">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Newborn Session</h4>
+                    </div>
+                </div>
+                <div class="portfolio-item wedding" data-category="wedding">
+                    <img src="assets/images/indian_wedding_photo_1774346471010.png" alt="Wedding">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Wedding Details</h4>
+                    </div>
+                </div>
+                <div class="portfolio-item events" data-category="events">
+                    <img src="assets/images/indian_event_photo_1774346500460.png" alt="Event">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Luxury Party</h4>
+                    </div>
+                </div>
+                <div class="portfolio-item baby" data-category="baby">
+                    <img src="assets/images/indian_baby_photo_1774346518211.png" alt="Baby">
+                    <div class="portfolio-overlay">
+                        <i class="fas fa-search-plus"></i>
+                        <h4>Baby First Year</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials section-padding" id="testimonials">
+        <div class="container text-center reveal">
+            <h2 class="section-title">What Our <span>Clients Say</span></h2>
+            
+            <div class="testimonial-carousel">
+                <div class="testimonial-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="testimonial-slide active">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="review">"Lumina captured our wedding beautifully. The attention to detail and golden hour shots were absolutely breathtaking. Highly recommended for a premium experience!"</p>
+                        <div class="client-info">
+                            <img src="assets/images/indian_avatar_1774346536684.png" alt="Client">
+                            <div>
+                                <h4>Sarah & John</h4>
+                                <span>Wedding Clients</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="testimonial-slide">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="review">"Our corporate event was covered with utmost professionalism. They delivered the photos quickly and the quality was stunning."</p>
+                        <div class="client-info">
+                            <img src="assets/images/indian_avatar_1774346536684.png" alt="Client">
+                            <div>
+                                <h4>Michael Brown</h4>
+                                <span>Event Director</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="testimonial-slide">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="review">"The maternity shoot was so comfortable and the photos look like they belong in a magazine. Thank you Lumina!"</p>
+                        <div class="client-info">
+                            <img src="assets/images/indian_avatar_1774346536684.png" alt="Client">
+                            <div>
+                                <h4>Emily Clark</h4>
+                                <span>Maternity Client</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking / Contact Section Area -->
+    <section class="contact-area section-padding" id="contact">
+        <div class="container row">
+            <!-- Booking Form -->
+            <div class="col-6 reveal book-form-section" id="book">
+                <div class="form-card">
+                    <h2>Book a <span>Session</span></h2>
+                    <p>Let's create something beautiful together.</p>
+                    <form id="bookingForm" class="booking-form">
+                        <div class="input-group">
+                            <input type="text" id="name" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="tel" id="phone" placeholder="Phone Number" required>
+                        </div>
+                        <div class="input-group">
+                            <select id="eventType" required>
+                                <option value="" disabled selected>Select Event Type</option>
+                                <option value="Wedding">Wedding</option>
+                                <option value="Pre-Wedding">Pre-Wedding</option>
+                                <option value="Event">Event</option>
+                                <option value="Baby Shoot">Baby Shoot</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="message" rows="4" placeholder="Message or Special Requests" required></textarea>
+                        </div>
+                        <div id="formMessage" class="form-message"></div>
+                        <button type="submit" class="btn btn-primary btn-full">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact & Map -->
+            <div class="col-6 reveal contact-info-section">
+                <h2 class="section-title">Get in <span>Touch</span></h2>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Visit Us</h4>
+                            <p>Ashok Nagar Ranchi</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>8239988980</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>lumina@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://maps.google.com/maps?q=Ashok%20Nagar%20Ranchi&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">LU<span>MI</span>NA</a>
+                <p>Capturing the elegance of your finest moments with premium photography services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Refund Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Lumina Photo Studio. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/918239988980?text=Hello,%20I%20want%20to%20book%20a%20photoshoot" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
