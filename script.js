@@ -2,7 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    const API_BASE = window.location.protocol + '//' + window.location.hostname + ':3000/api';
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.');
+    const API_BASE = isLocal ? window.location.protocol + '//' + window.location.hostname + ':3000/api' : '/api';
     // 0. Fetch Dynamic Data from Dashboard JSON
     fetch(API_BASE + '/data')
         .then(res => res.json())

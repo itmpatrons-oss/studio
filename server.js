@@ -7,10 +7,22 @@ const multer = require('multer');
 const app = express();
 const PORT = 3000;
 
+let DATA_FILE = path.join(__dirname, 'data.json');
+let UPLOAD_DIR = path.join(__dirname, 'assets', 'images');
+
+// Vercel read-only filesystem workaround
+if (process.env.VERCEL) {
+    DATA_FILE = '/tmp/data.json';
+    UPLOAD_DIR = '/tmp';
+    if (!fs.existsSync(DATA_FILE) && fs.existsSync(path.join(__dirname, 'data.json'))) {
+        fs.copyFileSync(path.join(__dirname, 'data.json'), DATA_FILE);
+    }
+}
+
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, 'assets', 'images'));
+        cb(null, UPLOAD_DIR);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -18,7 +30,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-const DATA_FILE = path.join(__dirname, 'data.json');
 
 app.use(cors());
 app.use(express.json());
@@ -79,6 +90,9 @@ app.post('/api/data', (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+    });
+}
+module.exports = app;
