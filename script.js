@@ -297,22 +297,35 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
 
-            setTimeout(() => {
-                formMessage.textContent = `Thank you, ${name}! Your booking request for ${evtType} on ${date} has been sent successfully. We will contact you soon.`;
-                formMessage.className = 'form-message success';
-                
-                // Reset form
-                bookingForm.reset();
+            fetch(API_BASE + '/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, evtType, date, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    formMessage.textContent = `Thank you, ${name}! Your booking request for ${evtType} on ${date} has been sent successfully. We will contact you soon.`;
+                    formMessage.className = 'form-message success';
+                    bookingForm.reset();
+                } else {
+                    formMessage.textContent = 'Something went wrong. Please try again.';
+                    formMessage.className = 'form-message error';
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                formMessage.textContent = 'Server error. Please try again later.';
+                formMessage.className = 'form-message error';
+            })
+            .finally(() => {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-
-                // Hide message after 5 seconds
                 setTimeout(() => {
                     formMessage.style.display = 'none';
                     formMessage.className = 'form-message';
                 }, 5000);
-
-            }, 1000);
+            });
         });
     }
 });

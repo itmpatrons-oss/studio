@@ -8,14 +8,19 @@ const app = express();
 const PORT = 3000;
 
 let DATA_FILE = path.join(__dirname, 'data.json');
+let BOOKINGS_FILE = path.join(__dirname, 'bookings.json');
 let UPLOAD_DIR = path.join(__dirname, 'assets', 'images');
 
 // Vercel read-only filesystem workaround
 if (process.env.VERCEL) {
     DATA_FILE = '/tmp/data.json';
+    BOOKINGS_FILE = '/tmp/bookings.json';
     UPLOAD_DIR = '/tmp';
     if (!fs.existsSync(DATA_FILE) && fs.existsSync(path.join(__dirname, 'data.json'))) {
         fs.copyFileSync(path.join(__dirname, 'data.json'), DATA_FILE);
+    }
+    if (!fs.existsSync(BOOKINGS_FILE) && fs.existsSync(path.join(__dirname, 'bookings.json'))) {
+        fs.copyFileSync(path.join(__dirname, 'bookings.json'), BOOKINGS_FILE);
     }
 }
 
@@ -87,6 +92,45 @@ app.post('/api/data', (req, res) => {
             return res.status(500).json({ error: 'Failed to write data' });
         }
         res.json({ message: 'Data updated successfully' });
+    });
+});
+
+// Get bookings
+app.get('/api/bookings', (req, res) => {
+    const token = req.headers.authorization;
+    if (token !== SECRET_TOKEN) {
+        return res.status(403).json({ error: 'Unauthorized access' });
+    }
+    fs.readFile(BOOKINGS_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.json([]);
+        }
+        try {
+            res.json(JSON.parse(data));
+        } catch(e) {
+            res.json([]);
+        }
+    });
+});
+
+// Create booking (public endpoint)
+app.post('/api/bookings', (req, res) => {
+    const newBooking = req.body;
+    newBooking.timestamp = new Date().toISOString();
+    
+    fs.readFile(BOOKINGS_FILE, 'utf8', (err, data) => {
+        let bookings = [];
+        if (!err && data) {
+            try { bookings = JSON.parse(data); } catch(e){}
+        }
+        bookings.push(newBooking);
+        fs.writeFile(BOOKINGS_FILE, JSON.stringify(bookings, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing bookings:', err);
+                return res.status(500).json({ error: 'Failed to write booking' });
+            }
+            res.json({ success: true, message: 'Booking received successfully' });
+        });
     });
 });
 

@@ -863,4 +863,8 @@ footer {
     .hero-content h1 { font-size: 2.2rem; }
     .section-title { font-size: 2rem; }
     .section-padding { padding: 60px 5%; }
+    
+    /* Testimonial Fixes for Mobile */
+    .testimonial-wrapper { min-height: 320px; }
+    .review { font-size: 1.15rem; line-height: 1.6; margin-bottom: 20px; }
 }

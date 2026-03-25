@@ -300,6 +300,7 @@
             <button class="nav-btn" data-target="portfolio-sec"><i class="fas fa-images"></i> Portfolio Grid</button>
             <button class="nav-btn" data-target="testimonials-sec"><i class="fas fa-comments"></i> Testimonials</button>
             <button class="nav-btn" data-target="contact-sec"><i class="fas fa-address-book"></i> Contact & Others</button>
+            <button class="nav-btn" data-target="bookings-sec"><i class="fas fa-calendar-check"></i> Bookings</button>
         </div>
         <div class="logout-wrap">
             <a href="index.html" class="website-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Go to Website</a>
@@ -369,6 +370,17 @@
                         <p>Manage all location details, titles, and background blocks.</p>
                     </div>
                     <div class="fields-grid" id="grid-contact"></div>
+                </div>
+
+                <!-- Bookings Section -->
+                <div class="form-section" id="bookings-sec">
+                    <div class="section-header">
+                        <h3>Session Bookings</h3>
+                        <p>View all client booking requests received from the website.</p>
+                    </div>
+                    <div id="grid-bookings" style="display: flex; flex-direction: column; gap: 20px;">
+                        <p style="color:var(--text-muted)">Loading bookings...</p>
+                    </div>
                 </div>
 
             </div>
@@ -545,6 +557,37 @@
                 .catch(err => {
                     document.getElementById('grid-hero').innerHTML = '<p style="color:red">Failed to connect to backend.</p>';
                 });
+
+            // Load Bookings
+            fetch(API_BASE + '/bookings', {
+                headers: { 'Authorization': token }
+            })
+            .then(res => res.json())
+            .then(bookings => {
+                const bGrid = document.getElementById('grid-bookings');
+                bGrid.innerHTML = '';
+                if (!bookings || bookings.length === 0) {
+                    bGrid.innerHTML = '<p style="color:var(--text-muted)">No bookings found.</p>';
+                    return;
+                }
+                bookings.reverse().forEach(b => {
+                    const card = document.createElement('div');
+                    card.className = 'field-card full-width';
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+                            <h4 style="color:var(--gold); margin:0;">${b.name} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">(${b.evtType})</span></h4>
+                            <span style="font-size:12px;color:var(--text-muted)">${new Date(b.timestamp).toLocaleString()}</span>
+                        </div>
+                        <p style="margin-bottom:10px;"><strong>Phone:</strong> ${b.phone}</p>
+                        <p style="margin-bottom:10px;"><strong>Date:</strong> ${b.date}</p>
+                        <p style="margin-bottom:10px;"><strong>Message:</strong><br/> <span style="color:var(--text-muted)">${b.message || 'No message provided'}</span></p>
+                    `;
+                    bGrid.appendChild(card);
+                });
+            })
+            .catch(err => {
+                document.getElementById('grid-bookings').innerHTML = '<p style="color:red">Failed to load bookings.</p>';
+            });
 
             // Save Data
             document.getElementById('adminForm').addEventListener('submit', (e) => {
